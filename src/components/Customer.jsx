@@ -59,7 +59,7 @@ const CustomerList = () => {
             ))}
         </div>
     )}
-    {isLoading && <Loader />}
+    {/* {isLoading && <Loader />} */}
 </div>
   );
 };

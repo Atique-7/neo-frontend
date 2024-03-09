@@ -52,6 +52,31 @@ const sessionSlice = createSlice({
         return state;
       }
     },
+    updateEndedSession: (state, action) => {
+      const { sessionId, newData } = action.payload;
+      const sessionIndex = state.endedSessions.findIndex(
+        (session) => session.sessionId === sessionId
+      );
+      console.log(newData);
+      console.log(sessionIndex);
+
+      if (sessionIndex !== -1) {
+        const updatedSession = { ...state.endedSessions[sessionIndex], ...newData };
+        console.log(updatedSession);
+        // Create a new array with the updated session object
+        return {
+          ...state,
+          endedSessions: [
+            ...state.endedSessions.slice(0, sessionIndex),
+            updatedSession,
+            ...state.endedSessions.slice(sessionIndex + 1),
+          ],
+        };
+      } else {
+        // Handle case where session is not found (optional)
+        return state;
+      }
+    },
     endSession: (state, action) => {
       const { sessionId } = action.payload;
       state.sessions = state.sessions.filter((session) => session.sessionId !== sessionId);

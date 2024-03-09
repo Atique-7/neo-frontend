@@ -58,9 +58,8 @@ const SessionCard = ({ session }) => {
       amount = calculateCost(session.plannedDuration, session.price)
     }
     console.log(amount);
-    dispatch(updateSession({sessionId: session.sessionId, newData: { isSessionEnding: true, amount: amount}}));
-    dispatch(updateSession({sessionId: session.sessionId, newData: { sessionEnded: true }}));
-    dispatch(shiftToPayment({sessionId: session.sessionId}));
+    dispatch(updateSession({sessionId: session.sessionId, newData: { isSessionEnding: true, amount: amount, sessionEnded: true}}));
+    console.log(session.remainingTime)
   };
 
   const deleteSessionHandler = () => {

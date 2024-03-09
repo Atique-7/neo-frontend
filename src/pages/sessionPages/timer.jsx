@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { msToTime } from '../../utils/utilFunctions'; // Assuming msToTime exists
 import { useSelector, useDispatch } from 'react-redux';
-import { updateSession } from '../../redux/sessionSlice';
+import { updateSession, shiftToPayment } from '../../redux/sessionSlice';
 
 const Timer = ({ session }) => {
   const startTime = useSelector(state => state.sessio.sessions.find(sessio => sessio.sessionId === session.sessionId).startTime);
@@ -13,13 +13,13 @@ const Timer = ({ session }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    
     if (isSessionEnding === false) {
       const intervalId = setInterval(() => {
         const newRemainingTime = Math.max(plannedDuration - (Date.now() - startTime), 0);
         const element = document.getElementById(session.sessionId);
+        setRemainingTime(newRemainingTime);
         console.log(newRemainingTime)
-        if(newRemainingTime == 0 && session.isSessionStarted == true){
+        if(newRemainingTime === 0 && session.isSessionStarted === true){
           console.log("ran")
           dispatch(updateSession({sessionId: session.sessionId, newData: { isSessionEnding: true}}))
         }
@@ -28,19 +28,21 @@ const Timer = ({ session }) => {
         } else {
           element.style.backgroundColor = "";
         }
-        setRemainingTime(newRemainingTime);
+        
       }, 1000); // Update every second
-  
       return () => clearInterval(intervalId); // Cleanup on unmount
     }
 
     if (sessionEnded === true) {
       const finalRemainingTime = Math.max(plannedDuration - (Date.now() - startTime), 0);
       dispatch(updateSession({ sessionId: session.sessionId, newData: { remainingTime: finalRemainingTime} }));
+      console.log(session.remainingTime);
+      console.log("timeRecorded")
       dispatch(updateSession({ sessionId: session.sessionId, newData: { sessionEnded: false } }));
+      dispatch(shiftToPayment({sessionId: session.sessionId}));
     }
 
-  }, [startTime, plannedDuration, sessionEnded, isSessionEnding]); // Add sessionEnded to the dependency array
+  }, [dispatch, startTime, plannedDuration, sessionEnded, isSessionEnding]); // Add sessionEnded to the dependency array
   
 
   return (

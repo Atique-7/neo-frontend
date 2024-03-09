@@ -31,7 +31,6 @@ const TransactionComponent = ({ customerId }) => {
         handleClosePaymentForm();
         dispatch(getCustomerById(customerId));
         dispatch(fetchTransactionsByCustomer(customerId));
-   
     };
 
     const handleClosePaymentForm = () => {

@@ -54,7 +54,7 @@ const EndedSessionCard = ({ session }) => {
         console.log(requestData)
 
         try {
-            const response = await api.put(`session/${session.sessionId}/`, requestData);
+            const response = await API.put(`session/${session.sessionId}/`, requestData);
             const data = response.data;
             console.log('Data from backend:', data);
             dispatch(endSession({ sessionId: session.sessionId }));
